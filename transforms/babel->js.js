@@ -5,5 +5,7 @@ module.exports = (source, filename, options) => {
   options = Object.create(options || null)
   options.filename = filename
   options.presets = (options.presets || []).concat(preset)
-  return babel.transform(source, options).code
+  options.sourceMaps = true
+  options.ast = false
+  return babel.transform(source, options)
 }

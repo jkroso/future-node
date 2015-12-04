@@ -9,6 +9,7 @@
   "keywords": ["require hook","babel","transpile","node"],
   "dependencies": {
     "babel-preset-node-giovanni": "*",
+    "source-map-support": "0",
     "glob-to-regexp": "*",
     "resolve-module": "*",
     "babel-core": "*"

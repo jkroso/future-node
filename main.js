@@ -1,3 +1,4 @@
+const sourceMapSupport = require('source-map-support')
 const resolve = require('resolve-module')
 const toRegex = require('glob-to-regexp')
 const Module = require('module')
@@ -6,6 +7,17 @@ const fs = require('fs')
 
 // must cache before monkey patch
 require('./transforms/babel->js')
+
+const maps = {}
+
+sourceMapSupport.install({
+  handleUncaughtExceptions: false,
+  environment: 'node',
+  retrieveSourceMap(filename) {
+    const map = maps && maps[filename]
+    return map ? {url: null, map: map} : null
+  }
+})
 
 const match = (glob, file) => toRegex(glob, {extended: true}).test(file)
 
@@ -36,7 +48,7 @@ Module.prototype.load = function(filename) {
   const dir = path.dirname(pkg)
   const json = loadJSON(pkg)
   if (!json.transpile) return load.call(this, filename)
-  
+
   for (var i = 0, len = json.transpile.length; i < len; i++) {
     var spec = json.transpile[i]
     var glob = path.join(dir, spec[0])
@@ -55,7 +67,12 @@ Module.prototype.load = function(filename) {
         error.message = `while requiring ${path} from ${pkg}: ${error.message}`
         throw error
       }
-      return fn(source, filename, options)
+      var result = fn(source, filename, options)
+      if (typeof result == 'object') {
+        maps[filename] = result.map
+        return result.code
+      }
+      return result
     }, fs.readFileSync(filename))
     this._compile(source, filename)
     break
