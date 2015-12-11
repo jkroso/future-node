@@ -49,13 +49,15 @@ Module.prototype.load = function(filename) {
   const json = loadJSON(pkg)
   if (!json.transpile) return load.call(this, filename)
 
+  var source = fs.readFileSync(filename)
+
   for (var i = 0, len = json.transpile.length; i < len; i++) {
     var spec = json.transpile[i]
     var glob = path.join(dir, spec[0])
     if (!match(glob, filename)) continue
     var mods = spec.slice(1)
     if (!Array.isArray(mods[0])) mods = [mods]
-    var source = mods.reduce((source, mod) => {
+    source = mods.reduce((source, mod) => {
       var path = mod[0]
       var options = mod[1]
       if (/^!sourcegraph\/(\w+->\w+)/.test(path)) {
@@ -73,10 +75,10 @@ Module.prototype.load = function(filename) {
         return result.code
       }
       return result
-    }, fs.readFileSync(filename))
-    this._compile(source, filename)
+    }, source)
     break
   }
 
+  this._compile(source, filename)
   this.loaded = true
 }
