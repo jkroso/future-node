@@ -49,7 +49,7 @@ Module.prototype.load = function(filename) {
   const json = loadJSON(pkg)
   if (!json.transpile) return load.call(this, filename)
 
-  var source = fs.readFileSync(filename)
+  var source = fs.readFileSync(filename, 'utf8')
 
   for (var i = 0, len = json.transpile.length; i < len; i++) {
     var spec = json.transpile[i]
