@@ -26,6 +26,6 @@
   "transpile": [["*.js", "!sourcegraph/babel->js", {"stage": 0}]],
   "repository": "git://github.com/jkroso/future-node.git",
   "author": "Jake Rosoman",
-  "files": ["main.js"],
+  "files": ["main.js", "bin", "transforms"],
   "license": "MIT"
 }
