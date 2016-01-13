@@ -1,6 +1,6 @@
 {
   "name": "future-node",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "main.js",
   "bin": "./bin/future-node",
   "description": "babel-node meets browserify-ish transforms",
@@ -19,10 +19,10 @@
     "babel-plugin-transform-exponentiation-operator": "6",
     "babel-plugin-transform-function-bind": "6",
     "babel-plugin-transform-object-rest-spread": "6",
+    "@jkroso/babel-plugin-runtime": "1",
     "babel-plugin-syntax-jsx": "6",
     "jsx-to-js": "1"
   },
-  "devDependencies": {},
   "transpile": [["*.js", "!sourcegraph/babel->js", {"stage": 0}]],
   "repository": "git://github.com/jkroso/future-node.git",
   "author": "Jake Rosoman",

@@ -14,6 +14,7 @@ const plugins = [
  .map(require)
  .concat(require('babel-plugin-syntax-jsx'))
  .concat(require('jsx-to-js').babel_plugin)
+ .concat(require('@jkroso/babel-plugin-runtime'))
 
 module.exports = (source, filename, options) => {
   options = Object.create(options || null)
