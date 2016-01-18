@@ -1,8 +1,35 @@
 #!/usr/bin/env node
 const path = require('path')
+const repl = require('repl')
+const tty = require('tty')
+const vm = require('vm')
 
 // install monkey patch
 require('../main')
 
-// run target script
-require(path.resolve(process.argv[2]))
+if (tty.isatty(process.stdin)) {
+  const transform = require('../transforms/babel->js')
+  const evalCode = (code, filename) => {
+    if (code == '') return undefined
+    code = transform(code, filename).code
+    return vm.runInThisContext(code, {filename})
+  }
+  repl.start({
+    prompt: "> ",
+    input: process.stdin,
+    output: process.stdout,
+    useGlobal: true,
+    eval: (code, context, filename, callback) => {
+      var result
+      try {
+        result = evalCode(code.trim(), filename)
+      } catch (e) {
+        callback(e)
+      }
+      callback(null, result)
+    }
+  })
+} else {
+  // run target script
+  require(path.resolve(process.argv[2]))
+}
