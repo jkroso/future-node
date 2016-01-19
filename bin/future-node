@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 const path = require('path')
 const repl = require('repl')
-const tty = require('tty')
 const vm = require('vm')
 
 // install monkey patch
 require('../main')
 
-if (tty.isatty(process.stdin)) {
+// REPL
+if (process.argv.length < 3) {
   const transform = require('../transforms/babel->js')
   const evalCode = (code, filename) => {
     if (code == '') return undefined
@@ -29,7 +29,8 @@ if (tty.isatty(process.stdin)) {
       callback(null, result)
     }
   })
-} else {
-  // run target script
+} 
+// run script
+else {
   require(path.resolve(process.argv[2]))
 }
