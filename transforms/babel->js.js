@@ -17,7 +17,8 @@ const plugins = [
  .concat(require('@jkroso/babel-plugin-runtime'))
 
 module.exports = (source, filename, options) => {
-  options = Object.create(options || null)
+  options = Object.assign({}, options || null)
+  delete options.stage
   options.filename = filename
   options.plugins = (options.plugins || []).concat(plugins)
   options.sourceMaps = true
